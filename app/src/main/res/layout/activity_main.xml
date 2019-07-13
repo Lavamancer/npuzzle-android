@@ -8,7 +8,7 @@
     <GridView
         android:id="@+id/gridView"
         android:layout_centerInParent="true"
-        android:layout_margin="10dp"
+        android:layout_margin="1dp"
         android:clipToPadding="false"
         android:clipChildren="true"
         android:scrollingCache="true"
@@ -19,8 +19,8 @@
         android:gravity="center_horizontal"
         android:scrollbars="none"
         tools:listitem="@layout/item_card"
-        android:horizontalSpacing="10dp"
-        android:verticalSpacing="10dp"
+        android:horizontalSpacing="1dp"
+        android:verticalSpacing="1dp"
         android:numColumns="2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
@@ -40,6 +40,21 @@
             android:textSize="50sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/progressBarRelativeLayout"
+        android:visibility="visible"
+        android:background="@color/blackTransparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:layout_centerInParent="true"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
 
 
     </RelativeLayout>

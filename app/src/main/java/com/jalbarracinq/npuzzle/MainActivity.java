@@ -1,5 +1,7 @@
 package com.jalbarracinq.npuzzle;
 
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridView;
@@ -7,18 +9,20 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Collections;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     GridView gridView;
     CardsAdapter cardsAdapter;
     RelativeLayout winRelativeLayout;
+    RelativeLayout progressBarRelativeLayout;
     boolean winGame = false;
 
-    private static final int SIDE = 5;
+    private static final int SIDE = 4;
 
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         gridView = findViewById(R.id.gridView);
         winRelativeLayout = findViewById(R.id.winRelativeLayout);
+        progressBarRelativeLayout = findViewById(R.id.progressBarRelativeLayout);
 
         cardsAdapter = new CardsAdapter(this, gridView);
         gridView.setNumColumns(SIDE);
@@ -35,16 +40,42 @@ public class MainActivity extends AppCompatActivity {
             cardsAdapter.getList().add(new Card(i == 0 ? null : i));
         }
 
-        Collections.shuffle(cardsAdapter.list);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                System.out.println("Before: " + new Date().toString());
+                for (int i = 0; i < 1000000; i++) {
+                    int position = getRandomCard();
+                    cardsAdapter.checkEmptyCardAround(cardsAdapter.getList().get(position), position, false);
+                }
+                System.out.println("After: " + new Date().toString());
 
-        cardsAdapter.notifyDataSetChanged();
-        gridView.invalidateViews();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                progressBarRelativeLayout.setVisibility(View.GONE);
+                cardsAdapter.notifyDataSetChanged();
+                gridView.invalidateViews();
+            }
+        }.execute();
     }
-
 
     public void winGame() {
         winRelativeLayout.setVisibility(View.VISIBLE);
         winGame = true;
     }
+
+    private int getRandomCard() {
+        Card card;
+        int position;
+        do {
+            position = (int) (Math.random() * (cardsAdapter.getList().size() - 1));
+            card = cardsAdapter.getList().get(position);
+        } while (card.getPosition() == null);
+        return position;
+    }
+
 
 }

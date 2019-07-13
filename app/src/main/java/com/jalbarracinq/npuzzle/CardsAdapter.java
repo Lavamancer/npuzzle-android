@@ -95,7 +95,7 @@ public class CardsAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     if (!((MainActivity) activity).winGame) {
-                        checkEmptyCardAround(card, position);
+                        checkEmptyCardAround(card, position, true);
                     }
                 }
             });
@@ -109,7 +109,7 @@ public class CardsAdapter extends BaseAdapter {
         return list;
     }
 
-    private void checkEmptyCardAround(Card card, int position) {
+    public void checkEmptyCardAround(Card card, int position, boolean checkOrdered) {
         int n = (int) Math.sqrt(list.size());
         int total = list.size();
         int row = (position / n) + 1;
@@ -149,17 +149,21 @@ public class CardsAdapter extends BaseAdapter {
         }
 
         if (emptyCard != null) {
-            changeCards(card, emptyCard);
+            changeCards(card, emptyCard, checkOrdered);
         }
 
-        checkOrderedCards();
+        if (checkOrdered) {
+            checkOrderedCards();
+        }
     }
 
-    private void changeCards(Card card, Card emptyCard) {
+    private void changeCards(Card card, Card emptyCard, boolean checkOrdered) {
         emptyCard.setPosition(card.getPosition());
         card.setPosition(null);
-        notifyDataSetChanged();
-        gridView.invalidateViews();
+        if (checkOrdered) {
+            notifyDataSetChanged();
+            gridView.invalidateViews();
+        }
     }
 
     private void checkOrderedCards() {
