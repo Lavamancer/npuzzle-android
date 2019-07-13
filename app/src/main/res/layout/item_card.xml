@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
+        <RelativeLayout
             android:background="@android:color/holo_orange_light"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
@@ -19,13 +19,25 @@
             android:layout_width="0dp"
             android:layout_height="0dp">
 
-            <View
+            <RelativeLayout
+                android:id="@+id/relativeLayout"
+                android:layout_centerInParent="true"
                 android:layout_margin="15dp"
                 android:background="@android:color/holo_red_light"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent">
 
-        </FrameLayout>
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_centerInParent="true"
+                    android:text="1"
+                    android:textSize="100sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
