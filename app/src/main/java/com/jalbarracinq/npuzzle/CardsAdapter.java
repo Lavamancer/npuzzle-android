@@ -1,6 +1,8 @@
 package com.jalbarracinq.npuzzle;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,6 @@ import java.util.List;
 
 public class CardsAdapter extends BaseAdapter {
 
-    private static final int N = 2;
 
     List<Card> list = new ArrayList<>();
     Activity activity;
@@ -66,6 +67,22 @@ public class CardsAdapter extends BaseAdapter {
         }
 
         final Card card = list.get(position);
+
+        int side = (int) Math.sqrt(list.size());
+
+        int textSize = 200 / side;
+        holder.textView.setTextSize(textSize);
+
+        int margin = 30 / side;
+        Resources r = activity.getResources();
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, margin, r.getDisplayMetrics());
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT
+        );
+        params.setMargins(px, px, px, px);
+        holder.relativeLayout.setLayoutParams(params);
+
         if (card.getPosition() == null) {
             holder.relativeLayout.setBackgroundResource(R.color.gray);
             holder.textView.setVisibility(View.GONE);
@@ -77,7 +94,9 @@ public class CardsAdapter extends BaseAdapter {
             holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    checkEmptyCardAround(card, position);
+                    if (!((MainActivity) activity).winGame) {
+                        checkEmptyCardAround(card, position);
+                    }
                 }
             });
         }
@@ -91,17 +110,18 @@ public class CardsAdapter extends BaseAdapter {
     }
 
     private void checkEmptyCardAround(Card card, int position) {
+        int n = (int) Math.sqrt(list.size());
         int total = list.size();
-        int row = (position / N) + 1;
+        int row = (position / n) + 1;
 
-        boolean leftBoard = (float) position / N == row - 1;
-        boolean rightBoard = (position + 1) / row == N;
+        boolean leftBoard = (float) position / n == row - 1;
+        boolean rightBoard = (position + 1) / row == n;
 
         Card emptyCard = null;
         Card auxCard;
 
-        if (position - N >= 0) { // up
-            auxCard = list.get(position - N);
+        if (position - n >= 0) { // up
+            auxCard = list.get(position - n);
             if (auxCard.getPosition() == null) {
                 emptyCard = auxCard;
             }
@@ -114,8 +134,8 @@ public class CardsAdapter extends BaseAdapter {
             }
         }
 
-        if (position + N < total) { // down
-            auxCard = list.get(position + N);
+        if (position + n < total) { // down
+            auxCard = list.get(position + n);
             if (auxCard.getPosition() == null) {
                 emptyCard = auxCard;
             }
@@ -132,8 +152,7 @@ public class CardsAdapter extends BaseAdapter {
             changeCards(card, emptyCard);
         }
 
-        // todo aqui comprobamos fin de partida
-//        tablero.getPartida().comprobarFinJuego();
+        checkOrderedCards();
     }
 
     private void changeCards(Card card, Card emptyCard) {
@@ -141,6 +160,22 @@ public class CardsAdapter extends BaseAdapter {
         card.setPosition(null);
         notifyDataSetChanged();
         gridView.invalidateViews();
+    }
+
+    private void checkOrderedCards() {
+        boolean orderedCards = true;
+        for (int i = 0; i < list.size() - 1; i++) {
+            Card card = list.get(i);
+            if (card.getPosition() == null || card.getPosition() != i + 1) {
+                orderedCards = false;
+                break;
+            }
+        }
+
+        if (orderedCards) {
+            ((MainActivity) activity).winGame();
+        }
+
     }
 
 }
