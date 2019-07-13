@@ -7,6 +7,8 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Collections;
+
 public class MainActivity extends AppCompatActivity {
 
     GridView gridView;
@@ -14,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout winRelativeLayout;
     boolean winGame = false;
 
-    private static final int SIDE = 3;
+    private static final int SIDE = 5;
 
 
     @Override
@@ -29,22 +31,11 @@ public class MainActivity extends AppCompatActivity {
         gridView.setNumColumns(SIDE);
         gridView.setAdapter(cardsAdapter);
 
-//        for (int i = 0; i < SIDE * SIDE; i++) {
-//            cardsAdapter.getList().add(new Card(i == 0 ? null : i));
-//        }
+        for (int i = 0; i < SIDE * SIDE; i++) {
+            cardsAdapter.getList().add(new Card(i == 0 ? null : i));
+        }
 
-        cardsAdapter.getList().add(new Card(1));
-        cardsAdapter.getList().add(new Card(2));
-        cardsAdapter.getList().add(new Card(3));
-        cardsAdapter.getList().add(new Card(4));
-        cardsAdapter.getList().add(new Card(5));
-        cardsAdapter.getList().add(new Card(6));
-        cardsAdapter.getList().add(new Card(8));
-        cardsAdapter.getList().add(new Card(7));
-        cardsAdapter.getList().add(new Card(null));
-
-
-//        Collections.shuffle(cardsAdapter.list);
+        Collections.shuffle(cardsAdapter.list);
 
         cardsAdapter.notifyDataSetChanged();
         gridView.invalidateViews();
