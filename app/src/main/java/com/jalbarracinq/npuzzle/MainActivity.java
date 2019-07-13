@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         gridView.setNumColumns(SIDE);
         gridView.setAdapter(cardsAdapter);
 
-        for (int i = 0; i < SIDE * SIDE; i++) {
-            cardsAdapter.getList().add(new Card(i == 0 ? null : i));
+        for (int i = 1; i <= SIDE * SIDE; i++) {
+            cardsAdapter.getList().add(new Card(i == SIDE * SIDE ? null : i));
         }
 
         new AsyncTask<Void, Void, Void>() {
