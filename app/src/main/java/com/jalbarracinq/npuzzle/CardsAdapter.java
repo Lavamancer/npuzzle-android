@@ -88,7 +88,7 @@ public class CardsAdapter extends BaseAdapter {
             holder.textView.setVisibility(View.GONE);
             holder.relativeLayout.setOnClickListener(null);
         } else {
-            holder.relativeLayout.setBackgroundResource(R.color.red);
+            holder.relativeLayout.setBackgroundResource(R.color.blue);
             holder.textView.setVisibility(View.VISIBLE);
             holder.textView.setText(card.getPosition().toString());
             holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
