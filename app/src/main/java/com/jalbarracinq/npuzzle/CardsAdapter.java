@@ -90,7 +90,7 @@ public class CardsAdapter extends BaseAdapter {
         } else {
             holder.relativeLayout.setBackgroundResource(R.color.blue);
             holder.textView.setVisibility(View.VISIBLE);
-            holder.textView.setText(card.getPosition().toString());
+            holder.textView.setText(""+card.getPosition());
             holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

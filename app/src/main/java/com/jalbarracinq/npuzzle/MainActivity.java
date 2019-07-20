@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout winRelativeLayout;
     RelativeLayout progressBarRelativeLayout;
     Button buttonRefresh;
+    EditText sideNumber;
     boolean winGame = false;
 
     private static final int SIDE = 4;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         winRelativeLayout = findViewById(R.id.winRelativeLayout);
         progressBarRelativeLayout = findViewById(R.id.progressBarRelativeLayout);
         buttonRefresh = findViewById(R.id.buttonRefresh);
+        sideNumber = findViewById(R.id.sideNumber);
 
         cardsAdapter = new CardsAdapter(this, gridView);
         gridView.setNumColumns(SIDE);
@@ -69,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 new AsyncTask<Void, Void, Void>() {
                     @Override
+                    protected void onPreExecute() {
+                        progressBarRelativeLayout.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
                     protected Void doInBackground(Void... voids) {
                         System.out.println("Before: " + new Date().toString());
                         for (int i = 0; i < 1000000; i++) {
@@ -88,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }.execute();
                 winRelativeLayout.setVisibility(View.GONE);
+                winGame = false;
             }
         });
     }
